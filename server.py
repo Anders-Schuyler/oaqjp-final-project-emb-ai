@@ -7,7 +7,7 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
-@app.route('/EmotionDetector', methods=['GET', 'POST'])
+@app.route('/emotionDetector', methods=['GET', 'POST'])
 def emotion_detection():
     if request.method == 'POST':
         text_to_analyze = request.form['text']
@@ -24,7 +24,6 @@ def emotion_detection():
     )
 
     return formatted_output
-
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
