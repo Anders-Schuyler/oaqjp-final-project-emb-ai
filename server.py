@@ -9,12 +9,13 @@ def home():
 
 @app.route('/emotionDetector', methods=['GET', 'POST'])
 def emotion_detection():
-    if request.method == 'POST':
-        text_to_analyze = request.form['text']
-    else:
-        text_to_analyze = request.args.get('textToAnalyze')
+    text_to_analyze = request.form['text'] if request.method == 'POST' else request.args.get('textToAnalyze')
 
     result = emotion_detector(text_to_analyze)
+
+    # Handle blank/invalid input
+    if result['dominant_emotion'] is None:
+        return "Invalid text! Please try again!"
 
     formatted_output = (
         f"For the given statement, the system response is 'anger': {result['anger']}, "
@@ -24,6 +25,7 @@ def emotion_detection():
     )
 
     return formatted_output
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
