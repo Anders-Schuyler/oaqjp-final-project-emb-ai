@@ -7,12 +7,15 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
-@app.route('/EmotionDetector', methods=['POST'])
+@app.route('/EmotionDetector', methods=['GET', 'POST'])
 def emotion_detection():
-    text_to_analyze = request.form['text']
+    if request.method == 'POST':
+        text_to_analyze = request.form['text']
+    else:
+        text_to_analyze = request.args.get('textToAnalyze')
+
     result = emotion_detector(text_to_analyze)
 
-    # Format the output string
     formatted_output = (
         f"For the given statement, the system response is 'anger': {result['anger']}, "
         f"'disgust': {result['disgust']}, 'fear': {result['fear']}, "
@@ -21,6 +24,7 @@ def emotion_detection():
     )
 
     return formatted_output
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
